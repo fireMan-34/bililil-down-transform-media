@@ -7,8 +7,10 @@
     "url": "https://github.com/fireMan-34/bililil-down-transform-media",
     "type": "github"
   },
+  "bin": "./bin/down-2-media.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn index.ts transform demo"
+    "dev": "ts-node-dev --respawn index.ts transform demo",
+    "build": "tsc"
   },
   "keywords": [
     "typescript",
