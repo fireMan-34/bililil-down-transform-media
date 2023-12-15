@@ -1,0 +1,10 @@
+{
+  "video": {
+    "type": "video",
+    "mode": "mock"
+  },
+  "audio": {
+    "type": "audio",
+    "mode": "mock"
+  }
+}

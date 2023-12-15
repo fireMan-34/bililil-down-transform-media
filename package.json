@@ -1,0 +1,29 @@
+{
+  "name": "bililil-down-transform-media",
+  "version": "1.0.0",
+  "description": "简易的 bililil 转换文件夹中的媒体文件",
+  "main": "index.ts",
+  "repository": {
+    "url": "https://github.com/fireMan-34/bililil-down-transform-media",
+    "type": "github"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn index.ts transform demo"
+  },
+  "keywords": [
+    "typescript",
+    "bililil"
+  ],
+  "author": "firman-34",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "16",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "glob": "^10.3.10"
+  }
+}
