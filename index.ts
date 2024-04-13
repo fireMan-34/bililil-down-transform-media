@@ -1,6 +1,6 @@
-import { ParsedPath, isAbsolute, join, parse, format, } from "path";
-import { argv } from "process";
-import { readFile, writeFile, } from 'fs/promises';
+import { execFileSync } from "child_process";
+import { ParsedPath, format, isAbsolute, join, parse, } from "path";
+import { argv, cwd } from "process";
 
 import { program } from "commander";
 import { glob } from "glob";
@@ -19,7 +19,7 @@ program
       ? downPathArg
       : join(process.cwd(), downPathArg);
 
-    const waitWorkFilePaths = await glob(["**/video.json", "**/audio.json"], {
+    const waitWorkFilePaths = await glob(["**/video.m4s", "**/audio.m4s"], {
       root: downPath,
       absolute: true,
     });
@@ -41,14 +41,27 @@ program
       };
       const videoPath = filePaths.find(filePath => filePath.name === 'video');
       const audioPath = filePaths.find(filePath => filePath.name === 'audio');
-      const videJson = JSON.parse(await readFile(format(videoPath), { encoding: 'utf8' }));
-      const audioJson = JSON.parse(await readFile(format(audioPath), { encoding: 'utf8' }));
-      const resultJson = JSON.stringify({
-        ['video']: videJson,
-        ['audio']: audioJson
-      }, null, 2);
-      await writeFile(join(dirPath, 'result.json'), resultJson, 'utf8');
+      execFileSync(join(cwd(), '/ffmpeg/bin/ffmpeg.exe'), [ 
+        '-i', 
+        format(videoPath), 
+        '-i', 
+        format(audioPath), 
+        '-c:v',
+        "copy", 
+        '-strict',
+        'experimental',
+        '-y', 
+        join(dirPath, 'result.mp4') 
+      ]);
+      // const videJson = JSON.parse(await readFile(format(videoPath), { encoding: 'utf8' }));
+      // const audioJson = JSON.parse(await readFile(format(audioPath), { encoding: 'utf8' }));
+      // const resultJson = JSON.stringify({
+      //   ['video']: videJson,
+      //   ['audio']: audioJson
+      // }, null, 2);
+      // await writeFile(join(dirPath, 'result.json'), resultJson, 'utf8');
     }
   });
 
 program.parse(argv);
+// D:\study\bililil-down-transform-media\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\video.m4s -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\audio.m4s -c:v copy -strict experimental D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\result.mp4

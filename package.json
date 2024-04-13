@@ -10,6 +10,8 @@
   "bin": "./bin/down-2-media.js",
   "scripts": {
     "dev": "ts-node-dev --respawn index.ts transform demo",
+    "transform:ts": "ts-node index.ts transform demo",
+    "transform": "node index.js transform demo",
     "build": "tsc"
   },
   "keywords": [
