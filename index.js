@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const path_1 = require("path");
 const process_1 = require("process");
+const fs_1 = require("fs");
 const commander_1 = require("commander");
 const glob_1 = require("glob");
 commander_1.program
@@ -38,6 +39,9 @@ commander_1.program
         ;
         const videoPath = filePaths.find(filePath => filePath.name === 'video');
         const audioPath = filePaths.find(filePath => filePath.name === 'audio');
+        if (!videoPath || !audioPath) {
+            continue;
+        }
         (0, child_process_1.execFileSync)((0, path_1.join)((0, process_1.cwd)(), '/ffmpeg/bin/ffmpeg.exe'), [
             '-i',
             (0, path_1.format)(videoPath),
@@ -50,14 +54,12 @@ commander_1.program
             '-y',
             (0, path_1.join)(dirPath, 'result.mp4')
         ]);
-        // const videJson = JSON.parse(await readFile(format(videoPath), { encoding: 'utf8' }));
-        // const audioJson = JSON.parse(await readFile(format(audioPath), { encoding: 'utf8' }));
-        // const resultJson = JSON.stringify({
-        //   ['video']: videJson,
-        //   ['audio']: audioJson
-        // }, null, 2);
-        // await writeFile(join(dirPath, 'result.json'), resultJson, 'utf8');
+        console.log('路径:', dirPath);
+        console.log('合成视频成功');
+        (0, fs_1.unlinkSync)((0, path_1.join)(dirPath, 'video.m4s'));
+        console.log('删除源视频');
+        (0, fs_1.unlinkSync)((0, path_1.join)(dirPath, 'audio.m4s'));
+        console.log('删除源音频');
     }
 });
 commander_1.program.parse(process_1.argv);
-// D:\study\bililil-down-transform-media\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\video.m4s -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\audio.m4s -c:v copy -strict experimental D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\result.mp4

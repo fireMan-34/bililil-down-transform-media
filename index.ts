@@ -1,6 +1,7 @@
 import { execFileSync } from "child_process";
 import { ParsedPath, format, isAbsolute, join, parse, } from "path";
 import { argv, cwd } from "process";
+import { unlinkSync } from 'fs';
 
 import { program } from "commander";
 import { glob } from "glob";
@@ -41,6 +42,9 @@ program
       };
       const videoPath = filePaths.find(filePath => filePath.name === 'video');
       const audioPath = filePaths.find(filePath => filePath.name === 'audio');
+      if (!videoPath || !audioPath) {
+        continue;
+      }
       execFileSync(join(cwd(), '/ffmpeg/bin/ffmpeg.exe'), [ 
         '-i', 
         format(videoPath), 
@@ -53,15 +57,13 @@ program
         '-y', 
         join(dirPath, 'result.mp4') 
       ]);
-      // const videJson = JSON.parse(await readFile(format(videoPath), { encoding: 'utf8' }));
-      // const audioJson = JSON.parse(await readFile(format(audioPath), { encoding: 'utf8' }));
-      // const resultJson = JSON.stringify({
-      //   ['video']: videJson,
-      //   ['audio']: audioJson
-      // }, null, 2);
-      // await writeFile(join(dirPath, 'result.json'), resultJson, 'utf8');
+      console.log('路径:', dirPath);
+      console.log('合成视频成功');
+      unlinkSync(join(dirPath, 'video.m4s'));
+      console.log('删除源视频');
+      unlinkSync(join(dirPath, 'audio.m4s'));
+      console.log('删除源音频');
     }
   });
 
 program.parse(argv);
-// D:\study\bililil-down-transform-media\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\video.m4s -i D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\audio.m4s -c:v copy -strict experimental D:\study\bililil-down-transform-media\demo\51448717\c_90053675\32\result.mp4
